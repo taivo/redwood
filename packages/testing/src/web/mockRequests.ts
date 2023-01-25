@@ -7,8 +7,9 @@ import {
   GraphQLRequest,
   ResponseTransformer,
   MockedResponse,
-  SetupWorkerApi,
+  SetupWorker,
   ResponseComposition,
+  DefaultBodyType,
 } from 'msw'
 import type { StartOptions as StartMSWWorkerOptions } from 'msw'
 import type { SharedOptions as SharedMSWOptions } from 'msw'
@@ -17,7 +18,7 @@ import type { SharedOptions as SharedMSWOptions } from 'msw'
 // before the server has started. We store the request handlers in
 // a queue that is drained once the server is started.
 let REQUEST_HANDLER_QUEUE: RequestHandler[] = []
-let SERVER_INSTANCE: SetupWorkerApi | any
+let SERVER_INSTANCE: SetupWorker | any
 
 /**
  * Plugs fetch for the correct target in order to capture requests.
@@ -86,7 +87,7 @@ export type DataFunction<
 ) => Query | void
 
 // These should get exported from MSW
-type ResponseFunction<BodyType = any> = (
+type ResponseFunction<BodyType extends DefaultBodyType> = (
   ...transformers: ResponseTransformer<BodyType>[]
 ) => MockedResponse<BodyType>
 
